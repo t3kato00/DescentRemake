@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerTracking : MonoBehaviour {
+public class AIPlayerTargetSelection : MonoBehaviour {
 
-    public LayerMask TrackingLevelLayers;
+    public LayerMask SensorLevelLayers;
 
     // The player we are targeting.
     private PlayerTarget targetedPlayer;
@@ -13,10 +13,12 @@ public class PlayerTracking : MonoBehaviour {
     }
 
     protected new Rigidbody rigidbody;
-    protected Tracking tracking;
+    protected AITargetTracking tracking;
+    protected AITargetFollowing following;
 
     protected void Start () {
-        tracking = GetComponent<Tracking>();
+        tracking = GetComponent<AITargetTracking>();
+        following = GetComponent<AITargetFollowing>();
         updateTargetedPlayerRountine = StartCoroutine(UpdateTargetedPlayerRountine());
     }
 
@@ -28,7 +30,7 @@ public class PlayerTracking : MonoBehaviour {
     private Coroutine updateTargetedPlayerRountine;
     private IEnumerator UpdateTargetedPlayerRountine()
     {
-        float interval = Random.Range(0.6f, 0.8f);
+        float interval = Random.Range(0.7f, 0.8f);
         while (true)
         {
             UpdateTargetedPlayer();
@@ -51,7 +53,7 @@ public class PlayerTracking : MonoBehaviour {
             if (playerDistance2 >= targetedPlayerDistance2)
                 continue;
 
-            if (Physics.Raycast(transform.position, relativePlayerPosition, out hit, Mathf.Sqrt(playerDistance2), TrackingLevelLayers))
+            if (Physics.Raycast(transform.position, relativePlayerPosition, out hit, Mathf.Sqrt(playerDistance2), SensorLevelLayers))
                 continue;
 
             targetedPlayer = player;
